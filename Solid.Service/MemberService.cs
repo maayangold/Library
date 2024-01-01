@@ -17,7 +17,7 @@ namespace Solid.Service
             _memberRepository = memberRepository;
         }
 
-        public IEnumerable<Member> GetAllMembers()
+        public List<Member> GetAllMembers()
         {
             return _memberRepository.GetMembers();
         }

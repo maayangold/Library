@@ -18,7 +18,7 @@ namespace Solid.Service
             _bookRepository = bookRepository;
         }
 
-        public IEnumerable<Book> GetAllBooks(string? text = "")
+        public List<Book> GetAllBooks()//string? text = "")
         {
             //לוגיקה עסקית
             //var books = _bookRepository.GetBooks();

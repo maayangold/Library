@@ -9,7 +9,7 @@ using Library.Entities;
 
 namespace Solid.Data.Repositories
 {
-    internal class MemberRepository : IMemberRepository
+    public class MemberRepository : IMemberRepository
     {
         private readonly DataContext _context;
         public List<Member> GetMembers()

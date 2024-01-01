@@ -19,7 +19,7 @@ namespace Solid.Service
         }
      
 
-        public IEnumerable<Borrow> GetAllBorrows()
+        public List<Borrow> GetAllBorrows()
         {
             return _borrowRepository.GetBorrows();
         }

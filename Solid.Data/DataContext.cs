@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Solid.Data
 {
-    internal class DataContext: DbContext
+    internal class DataContext//: DbContext
     {
         public List<Book> Books { get; set; }
         public List<Borrow> Borrows { get; set; }
@@ -19,9 +19,9 @@ namespace Solid.Data
             List<Member> members = new List<Member> { new Member("moshe", true), new Member("haim", true), new Member("tuvia", true) };
 
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=sample_db");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=sample_db");
+        //}
     }
 }

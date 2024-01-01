@@ -9,6 +9,6 @@ namespace Solid.Core.Services
 {
     public interface IBookService
     {
-         IEnumerable<Book> GetAllBooks(string? text = "");
+        List<Book> GetAllBooks();//string? text = "");
     }
 }

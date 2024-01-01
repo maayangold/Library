@@ -9,6 +9,6 @@ namespace Solid.Core.Services
 {
     public interface IMemberService
     {
-        IEnumerable<Member> GetAllMembers();
+        List<Member> GetAllMembers();
     }
 }

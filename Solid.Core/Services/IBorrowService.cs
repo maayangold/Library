@@ -9,7 +9,7 @@ namespace Solid.Core.Services
 {
     public interface IBorrowService
     {
-         IEnumerable<Borrow> GetAllBorrows();
+        List<Borrow> GetAllBorrows();
     }
 }
 
