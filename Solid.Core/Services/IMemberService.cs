@@ -9,6 +9,16 @@ namespace Solid.Core.Services
 {
     public interface IMemberService
     {
-        IEnumerable<Member> GetAllMembers();
+        public Task<IEnumerable<Member>> GetAllMembersAsync();
+
+        public Task<Member> GetByIdAsync(int id);
+
+        public Task<Member> AddAsync(Member m);
+
+        public Task<Member> PutAsync(int id, Member value);
+
+        public Task<Member> PutStatusAsync(int id);
+
+        public Task<Member> DeleteAsync(int id);
     }
 }

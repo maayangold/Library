@@ -10,48 +10,51 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Solid.Service
 {
-    public class BookService: IBookService
+    public class BookService : IBookService
     {
-        private readonly IBookRepository _bookRepository; 
+        private readonly IBookRepository _bookRepository;
         public BookService(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
-        } 
-        public Book Add(Book book)
-        {
-            return _bookRepository.Add(book);
         }
-
-        public IEnumerable<Book> GetAllBooks()
+        public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
             //לוגיקה עסקית
             //var books = _bookRepository.GetBooks();
-
             //return books.Where(u => u.Name.Contains(text));
-            return _bookRepository.GetBooks();
+            return await _bookRepository.GetBooksAsync();
         }
-        public Book GetById(int id)
+
+
+        public async Task<Book> GetByIdAsync(int id)
         {
-            return _bookRepository.GetById(id);
+            return await _bookRepository.GetByIdAsync(id);
         }
-
-        public Book Put(int id, Book value)
+        public async Task<Book> AddAsync(Book book)
         {
-            return _bookRepository.Put(id, value);
+            return await _bookRepository.AddAsync(book);
+        }
+
+
+        public async Task<Book> PutAsync(int id, Book value)
+        {
+            return await _bookRepository.PutAsync(id, value);
 
 
         }
 
-        public Book PutStatus(int id)
+        public async Task<Book> PutStatusAsync(int id)
         {
 
-            return _bookRepository.PutStatus(id);
+            return await _bookRepository.PutStatusAsync(id);
         }
 
-        public Book Delete(int id)
+        public async Task<Book> DeleteAsync(int id)
         {
-            return _bookRepository.Delete(id);
+            return await _bookRepository.DeleteAsync(id);
         }
+
+
     }
 
 }

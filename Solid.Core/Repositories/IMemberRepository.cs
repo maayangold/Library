@@ -9,16 +9,16 @@ namespace Solid.Core.Repositories
 {
     public interface IMemberRepository
     {
-        List<Member> GetMembers(); 
+        public Task<IEnumerable<Member>> GetMembersAsync();
 
-        public Member GetById(int id);
+        public Task<Member> GetByIdAsync(int id);
 
-        public Member Add(Member m);
-        // public Book Post(Book b);
+        public Task<Member> AddAsync(Member m);
 
-        public Member Put(int id, Member value);
+        public Task<Member> PutAsync(int id, Member value);
 
-        public Member PutStatus(int id);
-        public Member Delete(int id);
+        public Task<Member> PutStatusAsync(int id);
+
+        public Task<Member> DeleteAsync(int id);
     }
 }

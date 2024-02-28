@@ -1,5 +1,8 @@
+using AutoMapper;
 using Library.Entities;
+using Library.Models;
 using Microsoft.AspNetCore.Mvc;
+using Solid.Core.DTOs;
 using Solid.Core.Services;
 using Solid.Service;
 using System.Collections.Generic;
@@ -15,61 +18,80 @@ namespace Library.Controllers
     public class BorrowsController : ControllerBase
     {
 
-        private readonly BorrowService _borrowService;
-        public BorrowsController(BorrowService borrowService)
+        private readonly IBorrowService _borrowService;
+        private readonly IMapper _mapper;
+        public BorrowsController(IBorrowService borrowService, IMapper mapper)
         {
             _borrowService = borrowService;
+            _mapper = mapper;
         }
 
         // GET: api/<BorrowsController>
         [HttpGet]
-        public IEnumerable<Borrow> Get()
+        public async Task<ActionResult> Get()
         {
-            return _borrowService.GetAllBorrows();
+            var borrows = await _borrowService.GetAllBorrowsAsync();
+            var borrowsDto = _mapper.Map<IEnumerable<BorrowDto>>(borrows);
+
+            return Ok(borrowsDto);
         }
 
         // GET api/<BorrowsController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            Borrow b = _borrowService.GetById(id);
-            if (b == null)
+            var borrow = await _borrowService.GetByIdAsync(id);
+            if (borrow == null)
                 return NotFound();
-            return Ok(b);
+            var borrowDto = _mapper.Map<BorrowDto>(borrow);
+            return Ok(borrowDto);
         }
 
         // POST api/<BorrowsController>
         [HttpPost]
-        public ActionResult Post([FromBody] Borrow value)
-        {
+        public async Task<ActionResult> Post([FromBody] BorrowPostModel borrow)
 
-            return Ok(_borrowService.Add(value));
+        {
+            var borrowToAdd = _mapper.Map<Borrow>(borrow);
+            var newborrow = await _borrowService.AddAsync(borrowToAdd);
+            return Ok(newborrow);
         }
 
         // PUT api/<BorrowsController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Borrow value)
+        public async Task<ActionResult> Put(int id, [FromBody] BorrowPostModel borrow)
         {
-            Borrow b = _borrowService.GetById(id);
-            if (b == null)
+            var borrowToUpdate = _mapper.Map<Borrow>(borrow);
+            var newborrow = await _borrowService.PutAsync(id, borrowToUpdate);
+            if (newborrow == null)
                 return NotFound();
-         
-            return Ok(_borrowService.Put(id,value));
+            return Ok(newborrow);
 
         }
         // PUT api/<BorrowsController>/5
         [HttpPut("{id}/status")]
-        public ActionResult PutStats(int id)
+        public async Task<ActionResult> PutStats(int id)
         {
-            Borrow b = _borrowService.GetById(id);
-            if (b == null)
-                return NotFound();         
-            return Ok(_borrowService.PutStatus(id));
-            
+            var borrowToUpdateS = await _borrowService.PutStatusAsync(id);
+            if (borrowToUpdateS == null)
+                return NotFound();
+            return Ok(borrowToUpdateS);
+
 
 
         }
+        //[HttpPut("{id}")]
+        //public async Task<ActionResult> Delete(int id)
+        //{
+        //    var borrowToDelete = await _borrowService.DeleteAsync(id);
+        //    if (borrowToDelete == null)
+        //        return NotFound();
+        //    return Ok(borrowToDelete);
 
-      
+
+
+        //}
+
+
     }
 }

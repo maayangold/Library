@@ -9,18 +9,17 @@ namespace Solid.Core.Repositories
 {
     public interface IBookRepository
     {
-        public List<Book> GetBooks();
+        public Task<IEnumerable<Book>> GetBooksAsync();
 
-        public Book GetById(int id)
-      ;
+        public Task<Book> GetByIdAsync(int id);
+        //  Post
+        public Task<Book> AddAsync(Book Book);
 
-        public Book Add(Book Book);
-       // public Book Post(Book b);
+        public Task<Book> PutAsync(int id, Book value);
 
-        public Book Put(int id, Book value);
+        public Task<Book> PutStatusAsync(int id);
 
-        public Book PutStatus(int id);
-        public Book Delete(int id);
+        public Task<Book> DeleteAsync(int id);
 
     }
 }

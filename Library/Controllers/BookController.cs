@@ -1,10 +1,18 @@
+using AutoMapper;
+using AutoMapper.Execution;
 using Library.Entities;
+using Library.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Solid.Core.DTOs;
+using Solid.Core.Services;
 using Solid.Service;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using static Humanizer.In;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,65 +23,80 @@ namespace Library.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly BookService _bookService;
-        public BooksController(BookService bookService)
+        private readonly IBookService _bookService;
+        private readonly IMapper _mapper;
+        public BooksController(IBookService bookService, IMapper mapper)
         {
             _bookService = bookService;
+            _mapper = mapper;
         }
 
         // GET: api/<BooksController>
         [HttpGet]
-        public IEnumerable<Book> Get()
+        public async Task<ActionResult> Get()
         {
-            return _bookService.GetAllBooks();
+            var books = await _bookService.GetAllBooksAsync();
+            var booksDto = _mapper.Map<IEnumerable<BookDto>>(books);
+            return Ok(booksDto);
         }
 
         // GET api/<BooksController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            Book b = _bookService.GetById(id);
-            if (b == null)
+            var book = await _bookService.GetByIdAsync(id);
+            if (book == null)
                 return NotFound();
-            return Ok(b);
+            var bookDto = _mapper.Map<BookDto>(book);
+            return Ok(book);
         }
 
         // POST api/<BooksController>
         [HttpPost]
-        public ActionResult Post([FromBody] Book b)
+        public async Task<ActionResult> Post([FromBody] BookPostModel book)
         {
-            return Ok(_bookService.Add(b));
+            var bookToAdd = _mapper.Map<Book>(book);
+            var newbook = await _bookService.AddAsync(bookToAdd);
+            var bookDto = _mapper.Map<BookDto>(newbook);
+            return Ok(bookDto);
         }
+
 
         // PUT api/<BooksController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Book value)
+        public async Task<ActionResult> Put(int id, [FromBody] BookPostModel book)
         {
-            Book b = _bookService.GetById(id);
-            if (b == null)
+            var bookToUpdate = _mapper.Map<Book>(book);
+            var newbook = await _bookService.PutAsync(id, bookToUpdate);
+            if (newbook == null)
                 return NotFound();
-           
-            return Ok( _bookService.Put(id,value));
+
+            var bookDto = _mapper.Map<BookDto>(newbook);
+
+            return Ok(bookDto);
 
         }
         // PUT api/<BooksController>/5
         [HttpPut("{id}/status")]
-        public ActionResult PutStatus(int id)
+        public async Task<ActionResult> PutStatus(int id)
         {
-            Book b = _bookService.GetById(id);
-            if (b == null)
+            var bookToUpdateS = await _bookService.PutStatusAsync(id);
+            if (bookToUpdateS == null)
                 return NotFound();
-            return Ok( _bookService.PutStatus(id));
+            var bookDto = _mapper.Map<BookDto>(bookToUpdateS);
+
+            return Ok(bookDto);
 
         }
         // DELETE api/<BooksController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            Book b = _bookService.GetById(id);
-            if (b == null)
+            var bookToDelete = await _bookService.DeleteAsync(id);
+            if (bookToDelete == null)
                 return NotFound();
-            return Ok(_bookService.Delete(id));
+            var bookDto = _mapper.Map<BookDto>(bookToDelete);
+            return Ok(bookDto);
         }
     }
 }

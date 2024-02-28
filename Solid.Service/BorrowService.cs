@@ -10,43 +10,43 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Solid.Service
 {
-    public class BorrowService:IBorrowService
+    public class BorrowService : IBorrowService
     {
         private readonly IBorrowRepository _borrowRepository;
+        public async Task<IEnumerable<Borrow>> GetAllBorrowsAsync()
+        {
+            return await _borrowRepository.GetBorrowsAsync();
+        }
+        public async Task<Borrow> GetByIdAsync(int id)
+        {
+            return await _borrowRepository.GetByIdAsync(id);
+        }
         public BorrowService(IBorrowRepository borrowRepository)
         {
             _borrowRepository = borrowRepository;
         }
-        public Borrow Add(Borrow b)
+        public async Task<Borrow> AddAsync(Borrow b)
         {
-            return _borrowRepository.Add(b);
+            return await _borrowRepository.AddAsync(b);
         }
 
-        public IEnumerable<Borrow> GetAllBorrows()
-        {
-            return _borrowRepository.GetBorrows();
-        }
-        public Borrow GetById(int id)
-        {
-            return _borrowRepository.GetById(id);
-        }
 
-        public Borrow Put(int id, Borrow value)
+        public async Task<Borrow> PutAsync(int id, Borrow value)
         {
-            return _borrowRepository.Put(id, value);
+            return await _borrowRepository.PutAsync(id, value);
 
 
         }
 
-        public Borrow PutStatus(int id)
+        public async Task<Borrow> PutStatusAsync(int id)
         {
 
-            return _borrowRepository.PutStatus(id);
+            return await _borrowRepository.PutStatusAsync(id);
         }
 
-        public Borrow Delete(int id)
+        public async Task<Borrow> DeleteAsync(int id)
         {
-            return _borrowRepository.Delete(id);
+            return await _borrowRepository.DeleteAsync(id);
         }
     }
 }

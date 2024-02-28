@@ -9,18 +9,18 @@ namespace Solid.Core.Repositories
 {
     public interface IBorrowRepository
     {
-        List<Borrow> GetBorrows();
-       
+        public Task<IEnumerable<Borrow>> GetBorrowsAsync();
 
-        public Borrow GetById(int id)
-      ;
 
-        public Borrow Add(Borrow b);
-        // public Book Post(Book b);
+        public Task<Borrow> GetByIdAsync(int id);
 
-        public Borrow Put(int id, Borrow value);
+        public Task<Borrow> AddAsync(Borrow b);
+        // Post
 
-        public Borrow PutStatus(int id);
-        public Borrow Delete(int id);
+        public Task<Borrow> PutAsync(int id, Borrow value);
+
+        public Task<Borrow> PutStatusAsync(int id);
+        //????/להפוך סטטוס השאלה ללא קיים או למחוק
+        public Task<Borrow> DeleteAsync(int id);
     }
 }

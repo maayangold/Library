@@ -13,55 +13,58 @@ namespace Solid.Data.Repositories
     public class BorrowRepository : IBorrowRepository
     {
         private readonly DataContext _context;
-        public List<Borrow> GetBorrows()
+        public BorrowRepository(DataContext context)
         {
-            return _context.Borrows.Include(b => b.Member).Include(b => b.Books).ToList();
+            _context = context;
+        }
+        public async Task<IEnumerable<Borrow>> GetBorrowsAsync()
+        {
+            return await _context.Borrows.Include(b => b.Member).ToListAsync();
         }
 
-        public Borrow GetById(int id)
+        public async Task<Borrow> GetByIdAsync(int id)
         {
-            return _context.Borrows.Find(id);
+            return await _context.Borrows.Include(b => b.Member).FirstAsync(b => b.Id == id);
         }
 
-        public Borrow Add(Borrow b)
+        public async Task<Borrow> AddAsync(Borrow b)
         {
             _context.Borrows.Add(b);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return b;
         }
 
 
-        public Borrow Put(int id, Borrow value)
+        public async Task<Borrow> PutAsync(int id, Borrow value)
         {
-            Borrow b = _context.Borrows.Find(id);
+            Borrow b = await _context.Borrows.FirstAsync(b => b.Id == id);
             if (b != null)
             {
-                b.Member = value.Member;
-                b.MemberId = value.Member.Id;
-                b.Books = value.Books;
-                b.Date = value.Date;
+
+                b.MemberId = value.MemberId;
+                //b.Date = DateTime.Today;
                 b.Status = value.Status;
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return b;
 
         }
 
-        public Borrow PutStatus(int id)//לשאול אם לשלוח ספר ולחסוך חיפוש
+        public async Task<Borrow> PutStatusAsync(int id)//לשאול אם לשלוח לא רק id ולחסוך חיפוש
         {
-            Borrow b = _context.Borrows.Find(id);
+            Borrow b = await _context.Borrows.FirstAsync(b => b.Id == id);
             b.Status = !b.Status;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return b;
 
         }
-
-        public Borrow Delete(int id)
+        //לא בשימוש
+        public async Task<Borrow> DeleteAsync(int id)
         {
-            Borrow b = _context.Borrows.Find(id);
+            Borrow b = await _context.Borrows.FirstAsync(b => b.Id == id);
             if (b != null)
                 _context.Borrows.Remove(b);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return b;
         }
     }

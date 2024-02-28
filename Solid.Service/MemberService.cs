@@ -9,42 +9,45 @@ using Solid.Core.Services;
 
 namespace Solid.Service
 {
-    public class MemberService:IMemberService
+    public class MemberService : IMemberService
     {
         private readonly IMemberRepository _memberRepository;
+
         public MemberService(IMemberRepository memberRepository)
         {
             _memberRepository = memberRepository;
         }
-        public Member Add(Member b)
+        public async Task<Member> AddAsync(Member b)
         {
-            return _memberRepository.Add(b);
+            return await _memberRepository.AddAsync(b);
         }
-        public IEnumerable<Member> GetAllMembers()
+        public async Task<IEnumerable<Member>> GetAllMembersAsync()
         {
-            return _memberRepository.GetMembers();
+            return await _memberRepository.GetMembersAsync();
         }
-        public Member GetById(int id)
+        public async Task<Member> GetByIdAsync(int id)
         {
-            return _memberRepository.GetById(id);
-        }
-
-        public Member Put(int id, Member value)
-        {
-            return _memberRepository.Put(id, value);
-
-
+            return await _memberRepository.GetByIdAsync(id);
         }
 
-        public Member PutStatus(int id)
+        public async Task<Member> PutAsync(int id, Member value)
         {
+            return await _memberRepository.PutAsync(id, value);
 
-            return _memberRepository.PutStatus(id);
+
         }
 
-        public Member Delete(int id)
+        public async Task<Member> PutStatusAsync(int id)
         {
-            return _memberRepository.Delete(id);
+
+            return await _memberRepository.PutStatusAsync(id);
         }
+
+        public async Task<Member> DeleteAsync(int id)
+        {
+            return await _memberRepository.DeleteAsync(id);
+        }
+
+
     }
 }

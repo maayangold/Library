@@ -6,8 +6,14 @@ using System.Linq;
 using Solid.Service;
 using System.Collections.Generic;
 using Solid.Core.Services;
+using AutoMapper;
+using Solid.Core.DTOs;
+using AutoMapper.Execution;
+using Library.Models;
+using System.Diagnostics.Metrics;
+using Member = Library.Entities.Member;//help
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 //לקוח יכול לשאול ספר כמה פעמים!
 //בגלל זה לא צריך מפתח יחודי של ספר  ומשאיל
 namespace Library.Controllers
@@ -16,75 +22,68 @@ namespace Library.Controllers
     [ApiController]
     public class MemberController : ControllerBase
     {
-        //static int id = 1;
-        //static List<Member> members=new List<Member> { new Member(id++,"moshe",true), new Member(id++, "haim",true) , new Member(id++, "tuvia", true) };
-        private readonly MemberService _memberService;
-        public MemberController(MemberService memberService)
+        private readonly IMemberService _memberService;
+        private readonly IMapper _mapper;
+        public MemberController(IMemberService memberService, IMapper mapper)
         {
             _memberService = memberService;
+            _mapper = mapper;
         }
 
 
         // GET: api/<MembersController>
         [HttpGet]
-        public IEnumerable<Member> Get()
+        public async Task<ActionResult> Get()
         {
-            return _memberService.GetAllMembers();
+            var members = await _memberService.GetAllMembersAsync();
+            var membersDto = _mapper.Map<IEnumerable<MemberDto>>(members);
+
+            return Ok(membersDto);
         }
 
         // GET api/<MembersController>/5
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            Member m = _memberService.GetById(id);
-            if (m == null)
+            var member = await _memberService.GetByIdAsync(id);
+            if (member == null)
                 return NotFound();
-            return Ok(m);
+            var memberDto = _mapper.Map<MemberDto>(member);
+            return Ok(memberDto);
         }
 
         // POST api/<MembersController>
         [HttpPost]
-        public void Post([FromBody] Member value)
+        public async Task<ActionResult> Post([FromBody] MemberPostModel member)
+
         {
-            _memberService.GetAllMembers().Append(new Member(value.Name, true, value.Tel));
+            var memberToAdd = _mapper.Map<Member>(member);
+            var newMember = await _memberService.AddAsync(memberToAdd);
+            return Ok(newMember);
         }
 
         // PUT api/<MembersController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Member value)
+        public async Task<ActionResult> Put(int id, [FromBody] MemberPostModel member)
         {
-            Member m = _memberService.GetById(id);
-            if (m == null)
+            var memberToUpdate = _mapper.Map<Member>(member);
+            var newMember = await _memberService.PutAsync(id, memberToUpdate);
+            if (newMember == null)
                 return NotFound();
-            
-            //m.Name = value.Name;
-            //m.Tel = value.Tel;
-            //m.Status = value.Status;
-
-            //_memberService.GetAllMembers().Append(m);
-            return Ok(_memberService.Put(id,value));
+            return Ok(newMember);
 
         }
 
         // DELETE api/<MembersController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            Member m = _memberService.GetById( id);
-            if (m == null)
+            var memberToDelete = await _memberService.DeleteAsync(id);
+            if (memberToDelete == null)
                 return NotFound();
-      
-      return Ok(_memberService.Delete(id));
+
+            return Ok(memberToDelete);
         }
-    }//[HttpPut("{id}/status")]
-     //public ActionResult PutStatus(int id)
-     //{
-     //    Member m = members.Find(member => member.Id == id);
-     //    if (m == null)
-     //        return NotFound();
-     //    members.Remove(m);
-     //    m.Status = !m.Status;
-     //    members.Add(m);
-     //    return Ok();
-     //}
+    }
+
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Library;
 using Library.Entities;
 using Solid.Core.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Solid.Data.Repositories
 {
@@ -14,26 +15,30 @@ namespace Solid.Data.Repositories
 
     {
         private readonly DataContext _context;
-        public List<Book> GetBooks()
+        public BookRepository(DataContext context)
         {
-            return _context.Books.ToList();
+            _context = context;
         }
-        public Book GetById(int id)
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            return _context.Books.Find(id);
+            return await _context.Books.ToListAsync();
         }
-
-        public Book Add(Book Book)
+        public async Task<Book> GetByIdAsync(int id)
         {
-            _context.Books.Add(Book);
-            _context.SaveChanges();
-            return Book;
+            return await _context.Books.FirstAsync(b => b.Id == id);
         }
 
-
-        public Book Put(int id, Book value)
+        public async Task<Book> AddAsync(Book book)
         {
-            Book book = _context.Books.Find(id);
+            _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+            return book;
+        }
+
+
+        public async Task<Book> PutAsync(int id, Book value)
+        {
+            Book book = await _context.Books.FirstAsync(b => b.Id == id);
             if (book != null)
             {
                 book.Status = value.Status;
@@ -41,28 +46,30 @@ namespace Solid.Data.Repositories
                 book.Title = value.Title;
                 book.Description = value.Description;
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return book;
 
         }
 
-        public Book PutStatus(int id)//לשאול אם לשלוח ספר ולחסוך חיפוש
+        public async Task<Book> PutStatusAsync(int id)//לשאול אם לשלוח ספר ולחסוך חיפוש
         {
-            Book book = _context.Books.Find(id);
+            Book book = await _context.Books.FirstAsync(b => b.Id == id);
             book.Status = !book.Status;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return book;
 
         }
 
-        public Book Delete(int id)
+        public async Task<Book> DeleteAsync(int id)
         {
             Book book = _context.Books.Find(id);
             if (book != null)
                 _context.Books.Remove(book);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return book;
         }
+
+
     }
 
 

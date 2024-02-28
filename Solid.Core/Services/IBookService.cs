@@ -9,6 +9,17 @@ namespace Solid.Core.Services
 {
     public interface IBookService
     {
-         IEnumerable<Book> GetAllBooks();
+        public Task<IEnumerable<Book>> GetAllBooksAsync();
+
+        public Task<Book> GetByIdAsync(int id);
+
+        public Task<Book> AddAsync(Book Book);
+
+        public Task<Book> PutAsync(int id, Book value);
+
+        public Task<Book> PutStatusAsync(int id);
+
+        public Task<Book> DeleteAsync(int id);
+
     }
 }
