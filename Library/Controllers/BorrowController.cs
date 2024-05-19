@@ -80,17 +80,26 @@ namespace Library.Controllers
 
 
         }
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult> Delete(int id)
-        //{
-        //    var borrowToDelete = await _borrowService.DeleteAsync(id);
-        //    if (borrowToDelete == null)
-        //        return NotFound();
-        //    return Ok(borrowToDelete);
 
+        // POST api/<BorrowsController>/5/books
+        [HttpPut("{id}/books/{bookId}")]
+        public async Task<ActionResult> AddBookToBorrow(int id, [FromBody] int bookId)
+        {
+            var borrow = await _borrowService.AddBookToBorrowAsync(id, bookId);
+            if (borrow == null)
+                return NotFound();
+            return Ok(borrow);
+        }
 
-
-        //}
+        // DELETE api/<BorrowsController>/5/books/3
+        [HttpDelete("{id}/books/{bookId}")]
+        public async Task<ActionResult> RemoveBookFromBorrow(int id, int bookId)
+        {
+            var borrow = await _borrowService.RemoveBookFromBorrowAsync(id, bookId);
+            if (borrow == null)
+                return NotFound();
+            return Ok(borrow);
+        }
 
 
     }

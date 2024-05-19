@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string Tel { get; set; }
         public bool Status { get; set; }
-        public Borrow Borrow { get; set; }
+        public List< Borrow>Borrows { get; set; }
     
     }
 }

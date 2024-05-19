@@ -38,23 +38,21 @@ namespace Solid.Data.Repositories
 
         public async Task<Book> PutAsync(int id, Book value)
         {
-            Book book = await _context.Books.FirstAsync(b => b.Id == id);
+            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
             if (book != null)
             {
-                book.Status = value.Status;
+                book.IsBorrowed = value.IsBorrowed;
                 book.Author = value.Author;
                 book.Title = value.Title;
                 book.Description = value.Description;
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
             return book;
-
         }
-
         public async Task<Book> PutStatusAsync(int id)//לשאול אם לשלוח ספר ולחסוך חיפוש
         {
             Book book = await _context.Books.FirstAsync(b => b.Id == id);
-            book.Status = !book.Status;
+            book.IsBorrowed = !book.IsBorrowed;
             await _context.SaveChangesAsync();
             return book;
 

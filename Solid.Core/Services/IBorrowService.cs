@@ -20,7 +20,8 @@ namespace Solid.Core.Services
 
         public Task<Borrow> PutStatusAsync(int id);
 
-        public Task<Borrow> DeleteAsync(int id);
+        public Task<Borrow> AddBookToBorrowAsync(int borrowId, int bookId);
+        public Task<Borrow> RemoveBookFromBorrowAsync(int borrowId, int bookId);
 
 
     }

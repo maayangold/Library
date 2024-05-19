@@ -8,11 +8,8 @@ namespace Library.Entities
         public string Title { get; set; }
         public string Description { get; set; }
         public string Author { get; set; }
-
-        //Many-To-Many
-        public List<Borrow> Borrows { get; set; }
-        public bool Status { get; set; }
-         
+        public bool IsBorrowed { get; set; }
+        public List<Borrow>borrows { get; set; }
 
     }
 }

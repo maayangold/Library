@@ -1,10 +1,4 @@
 ﻿using Solid.Core.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Library;
 using Library.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,59 +7,91 @@ namespace Solid.Data.Repositories
     public class BorrowRepository : IBorrowRepository
     {
         private readonly DataContext _context;
+
         public BorrowRepository(DataContext context)
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Borrow>> GetBorrowsAsync()
         {
-            return await _context.Borrows.Include(b => b.Member).ToListAsync();
+            return await _context.Borrows
+                .Include(b => b.Member)
+                .Include(b => b.Books).
+                ThenInclude(book => book.Title)
+                .ToListAsync();
         }
+
+
 
         public async Task<Borrow> GetByIdAsync(int id)
         {
-            return await _context.Borrows.Include(b => b.Member).FirstAsync(b => b.Id == id);
+            return await _context.Borrows.Include(b => b.Member).FirstOrDefaultAsync(b => b.Id == id);
         }
 
-        public async Task<Borrow> AddAsync(Borrow b)
+        public async Task<Borrow> AddAsync(Borrow borrow)
         {
-            _context.Borrows.Add(b);
+            _context.Borrows.Add(borrow);
             await _context.SaveChangesAsync();
-            return b;
+            return borrow;
         }
-
 
         public async Task<Borrow> PutAsync(int id, Borrow value)
         {
-            Borrow b = await _context.Borrows.FirstAsync(b => b.Id == id);
-            if (b != null)
+            var borrow = await _context.Borrows.FirstOrDefaultAsync(b => b.Id == id);
+            if (borrow != null)
             {
-
-                b.MemberId = value.MemberId;
-                //b.Date = DateTime.Today;
-                b.Status = value.Status;
+                borrow.MemberId = value.MemberId;
+                borrow.Date = DateTime.Today;
+                borrow.Status = value.Status;
+                borrow.Books=new List<Book>();
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
-            return b;
-
+            return borrow;
         }
 
-        public async Task<Borrow> PutStatusAsync(int id)//לשאול אם לשלוח לא רק id ולחסוך חיפוש
+        public async Task<Borrow> PutStatusAsync(int id)
         {
-            Borrow b = await _context.Borrows.FirstAsync(b => b.Id == id);
-            b.Status = !b.Status;
-            await _context.SaveChangesAsync();
-            return b;
+            var borrow = await _context.Borrows.FirstOrDefaultAsync(b => b.Id == id);
+            if (borrow != null)
+            {
+                borrow.Status = !borrow.Status;
+                await _context.SaveChangesAsync();
+            }
+            return borrow;
+        }
 
-        }
-        //לא בשימוש
-        public async Task<Borrow> DeleteAsync(int id)
+        public async Task<Borrow> AddBookToBorrowAsync(int borrowId, int bookId)
         {
-            Borrow b = await _context.Borrows.FirstAsync(b => b.Id == id);
-            if (b != null)
-                _context.Borrows.Remove(b);
-            await _context.SaveChangesAsync();
-            return b;
+            var borrow = await _context.Borrows.Include(b => b.Books).FirstOrDefaultAsync(b => b.Id == borrowId);
+            if (borrow != null)
+            {
+                var book = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+                if (book != null)
+                {
+                    book.IsBorrowed = true; // Mark the book as borrowed
+                    borrow.Books.Add(book);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return borrow;
         }
+
+        public async Task<Borrow> RemoveBookFromBorrowAsync(int borrowId, int bookId)
+        {
+            var borrow = await _context.Borrows.Include(b => b.Books).FirstOrDefaultAsync(b => b.Id == borrowId);
+            if (borrow != null)
+            {
+                var bookToRemove = await _context.Books.FirstOrDefaultAsync(b => b.Id == bookId);
+                if (bookToRemove != null)
+                {
+                    bookToRemove.IsBorrowed = false; 
+                    borrow.Books.Remove(bookToRemove);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return borrow;
+        }
+
     }
 }

@@ -20,7 +20,7 @@ namespace Solid.Core.Repositories
         public Task<Borrow> PutAsync(int id, Borrow value);
 
         public Task<Borrow> PutStatusAsync(int id);
-        //????/להפוך סטטוס השאלה ללא קיים או למחוק
-        public Task<Borrow> DeleteAsync(int id);
+        public Task<Borrow> AddBookToBorrowAsync(int borrowId, int bookId);
+        public Task<Borrow> RemoveBookFromBorrowAsync(int borrowId, int bookId);
     }
 }

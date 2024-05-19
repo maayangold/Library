@@ -10,9 +10,10 @@ namespace Solid.Core.DTOs
     public class BorrowDto
     {
         public int Id { get; set; }
-        //Foreign Key
-        public int MemberId { get; set; }       
-       
+        public string MemberName { get; set; }
+        public DateTime Date { get; set; }
         public bool Status { get; set; }
+        public List<BookDto> Books { get; set; }
     }
 }
+

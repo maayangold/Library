@@ -61,7 +61,8 @@ namespace Library.Controllers
             var newMember = await _memberService.AddAsync(memberToAdd);
             return Ok(newMember);
         }
-
+        [HttpPut("{id}/borrow")]
+ 
         // PUT api/<MembersController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] MemberPostModel member)

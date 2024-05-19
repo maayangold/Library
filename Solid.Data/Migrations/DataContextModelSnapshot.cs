@@ -22,6 +22,21 @@ namespace Solid.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("BookBorrow", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("borrowsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "borrowsId");
+
+                    b.HasIndex("borrowsId");
+
+                    b.ToTable("BookBorrow");
+                });
+
             modelBuilder.Entity("Library.Entities.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -34,14 +49,11 @@ namespace Solid.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("BorrowId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
+                    b.Property<bool>("IsBorrowed")
                         .HasColumnType("bit");
 
                     b.Property<string>("Title")
@@ -49,8 +61,6 @@ namespace Solid.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BorrowId");
 
                     b.ToTable("Books");
                 });
@@ -103,17 +113,25 @@ namespace Solid.Data.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("Library.Entities.Book", b =>
+            modelBuilder.Entity("BookBorrow", b =>
                 {
+                    b.HasOne("Library.Entities.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Library.Entities.Borrow", null)
-                        .WithMany("Books")
-                        .HasForeignKey("BorrowId");
+                        .WithMany()
+                        .HasForeignKey("borrowsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Library.Entities.Borrow", b =>
                 {
                     b.HasOne("Library.Entities.Member", "Member")
-                        .WithMany()
+                        .WithMany("Borrows")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -121,9 +139,9 @@ namespace Solid.Data.Migrations
                     b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("Library.Entities.Borrow", b =>
+            modelBuilder.Entity("Library.Entities.Member", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("Borrows");
                 });
 #pragma warning restore 612, 618
         }

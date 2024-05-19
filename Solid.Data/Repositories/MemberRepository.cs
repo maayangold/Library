@@ -28,6 +28,7 @@ namespace Solid.Data.Repositories
 
         public async Task<Member> AddAsync(Member m)
         {
+            m.Status = true;
             _context.Members.Add(m);
             await _context.SaveChangesAsync();
             return m;
@@ -48,7 +49,7 @@ namespace Solid.Data.Repositories
 
         }
 
-        public async Task<Member> PutStatusAsync(int id)//לשאול אם לשלוח ספר ולחסוך חיפוש
+        public async Task<Member> PutStatusAsync(int id)
         {
             Member m = await _context.Members.FirstAsync(b => b.Id == id);
             m.Status = !m.Status;

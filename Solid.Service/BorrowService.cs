@@ -44,9 +44,16 @@ namespace Solid.Service
             return await _borrowRepository.PutStatusAsync(id);
         }
 
-        public async Task<Borrow> DeleteAsync(int id)
+ 
+
+        public async Task<Borrow> AddBookToBorrowAsync(int borrowId, int bookId)
         {
-            return await _borrowRepository.DeleteAsync(id);
+            return await _borrowRepository.AddBookToBorrowAsync(borrowId,bookId);
+        }
+
+        public async Task<Borrow> RemoveBookFromBorrowAsync(int borrowId, int bookId)
+        {
+            return await _borrowRepository.RemoveBookFromBorrowAsync(borrowId, bookId);
         }
     }
 }
