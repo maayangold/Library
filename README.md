@@ -20,7 +20,7 @@
    [https://localhost:7170/api/Books](https://library.co.il/books)/1
  - הוספת ספר-  POST [https://localhost:7170/api/Books](https://api/Books%20) 
  - עדכון ספר- PUT [https://localhost:7170/api/Books/1](https://api/Books/1)
- - עדכון סטטוס ספר  PUT [https://localhost:7170/api/Book/1](https://api/Book/1)/status
+ - עדכון סטטוס ספר לספר מושאל PUT [https://localhost:7170/api/Book/1](https://api/Book/1)/status
  -  מחיקת ספר- DELETE [https://localhost:7170/api/Book/1](https://api/Member/1)
 
 ## מיפוי Routes למנוי
@@ -40,5 +40,8 @@
    [https://localhost:7170/api/Borrow](https://api/Borrow%20) /1
  - הוספת השאלה-  POST [https://localhost:7170/api/  Borrow](https://api/%20Borrow%20)
  - עדכון השאלה- PUT https://localhost:7170/api/Borrow/1
+ /-  עידכון ספר להוספה בהשאלה- PUT https://localhost:7170/api/Borrow/1/books/2
+ -  עידכון ספר להסרה מההשאלה- DELETE https://localhost:7170/api/Borrow/1/books/2
+
  - עדכון סטטוס השאלה-  PUT
    [https://localhost:7170/api/Borrow/1](https://api/Borrow/1)/status 
