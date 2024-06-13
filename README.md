@@ -1,47 +1,73 @@
-# *library*
+# Library Management System API
 
-# ספריה
+This project provides a RESTful API for managing a library system, including operations for managing members, books, borrowed items, and user authentication.
 
-## תיאור הפרויקט
+## Technologies Used
 
-מערכת לניהול ספרייה. באמצעות המערכת ניתן להשאיל ספרים למנויים, ולנהל את כלל הספרייה.
+- ASP.NET Core
+- Entity Framework Core
+- AutoMapper
+- JWT Authentication
 
+## Controllers
 
-## ישויות
- - ספר
- - מנויי
- - השאלה
+### MemberController
 
-## מיפוי Routes לספר
- 
+Manages operations related to library members.
 
- - שליפת רשימת הספרים- GET [https://localhost:7170/api/Books
- - שליפת ספר לפי מזהה- GET
-   [https://localhost:7170/api/Books](https://library.co.il/books)/1
- - הוספת ספר-  POST [https://localhost:7170/api/Books](https://api/Books%20) 
- - עדכון ספר- PUT [https://localhost:7170/api/Books/1](https://api/Books/1)
- - עדכון סטטוס ספר לספר מושאל PUT [https://localhost:7170/api/Book/1](https://api/Book/1)/status
- -  מחיקת ספר- DELETE [https://localhost:7170/api/Book/1](https://api/Member/1)
+### BorrowsController
 
-## מיפוי Routes למנוי
+Handles operations related to borrowed books.
 
- - שליפת רשימת המנויים- GET [https://localhost:7170/api/](https://api/)Members 
- - שליפת מנוי לפי מזהה- GET https://localhost:7170/api/Members/1
- - הוספת מנוי- POST [https://localhost:7170/api/Members](https://api/Members) 
- - עדכון מנוי- PUT https://localhost:7170/api/Members/1
- - עדכון סטטוס מנוי-  PUT
-   [https://localhost:7170/api/Member/1](https://api/Member/1)/status 
- - מחיקת מנוי- DELETE [https://localhost:7170/api/Member/1](https://api/Member/1)
+### BooksController
 
-## מיפוי Routes להשאלה
+Manages operations related to library books.
 
- -  שליפת רשימת השאלות- GET https://localhost:7170/api/Borrow
- - שליפת השאלה לפי מזהה- GET
-   [https://localhost:7170/api/Borrow](https://api/Borrow%20) /1
- - הוספת השאלה-  POST [https://localhost:7170/api/  Borrow](https://api/%20Borrow%20)
- - עדכון השאלה- PUT https://localhost:7170/api/Borrow/1
- /-  עידכון ספר להוספה בהשאלה- PUT https://localhost:7170/api/Borrow/1/books/2
- -  עידכון ספר להסרה מההשאלה- DELETE https://localhost:7170/api/Borrow/1/books/2
+### AuthController
 
- - עדכון סטטוס השאלה-  PUT
-   [https://localhost:7170/api/Borrow/1](https://api/Borrow/1)/status 
+Provides authentication functionality using JWT tokens.
+
+## Getting Started
+
+To run the project locally, follow these steps:
+
+1. Clone the repository.
+2. Set up your database connection in `appsettings.json`.
+3. Run the application.
+
+## API Endpoints
+
+### Member Management
+
+- `GET /api/Member`: Retrieves all members.
+- `POST /api/Member`: Adds a new member.
+- ...
+
+### Borrowed Items Management
+
+- `GET /api/Borrows`: Retrieves all borrowed items.
+- `POST /api/Borrows`: Adds a new borrowed item.
+- ...
+
+### Book Management
+
+- `GET /api/Books`: Retrieves all books in the library.
+- `POST /api/Books`: Adds a new book to the library.
+- ...
+
+### Authentication
+
+- `POST /api/Auth`: Authenticates users and returns a JWT token.
+
+## Contributing
+
+Contributions are welcome! Please follow our [contribution guidelines](CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For questions or support, contact [Your Name](mailto:your.email@example.com).
+
