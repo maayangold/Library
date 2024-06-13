@@ -14,6 +14,7 @@ namespace Solid.Core.Services
         public Task<Member> GetByIdAsync(int id);
 
         public Task<Member> AddAsync(Member m);
+        public Task<Borrow> BorrowBooksAsync(int memberId, List<int> bookIds);
 
         public Task<Member> PutAsync(int id, Member value);
 

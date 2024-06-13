@@ -12,7 +12,7 @@ namespace Solid.Core.Services
         public Task<IEnumerable<Book>> GetAllBooksAsync();
 
         public Task<Book> GetByIdAsync(int id);
-
+        
         public Task<Book> AddAsync(Book Book);
 
         public Task<Book> PutAsync(int id, Book value);

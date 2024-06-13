@@ -61,8 +61,22 @@ namespace Library.Controllers
             var newMember = await _memberService.AddAsync(memberToAdd);
             return Ok(newMember);
         }
-        [HttpPut("{id}/borrow")]
- 
+
+        // POST: api/Member/5/borrow
+        [HttpPost("{id}/borrow")]
+        public async Task<ActionResult<BorrowDto>> BorrowBooks(int memberId, [FromBody] List<int> bookIds)
+        {
+            try
+            {
+                var borrow = await _memberService.BorrowBooksAsync(memberId, bookIds);
+                var borrowDto = _mapper.Map<BorrowDto>(borrow);
+                return  borrowDto;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         // PUT api/<MembersController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] MemberPostModel member)

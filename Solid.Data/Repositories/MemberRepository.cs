@@ -29,6 +29,7 @@ namespace Solid.Data.Repositories
         public async Task<Member> AddAsync(Member m)
         {
             m.Status = true;
+            m.Borrows = new List<Borrow>();
             _context.Members.Add(m);
             await _context.SaveChangesAsync();
             return m;
@@ -48,7 +49,41 @@ namespace Solid.Data.Repositories
             return m;
 
         }
+        public async Task<Borrow> BorrowBooksAsync(int memberId, List<int> bookIds)
+        {
+            var member = await _context.Members.Include(m => m.Borrows).FirstOrDefaultAsync(m => m.Id == memberId);
+            if (member == null)
+            {
+                // Handle member not found error
+                throw new ArgumentException("Member not found");
+            }
 
+            var booksToBorrow = await _context.Books.Where(b => bookIds.Contains(b.Id) && !b.IsBorrowed).ToListAsync();
+            if (booksToBorrow.Count != bookIds.Count)
+            {
+                // Handle case where some books were not found or already borrowed
+                throw new ArgumentException("Some books are not available for borrowing");
+            }
+
+            var borrow = new Borrow
+            {
+                Date = DateTime.UtcNow,
+                Status = true, // Assuming borrowed status is active
+                MemberId = memberId,
+                Books = booksToBorrow
+            };
+
+            _context.Borrows.Add(borrow);
+
+            foreach (var book in booksToBorrow)
+            {
+                book.IsBorrowed = true;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return borrow;
+        }
         public async Task<Member> PutStatusAsync(int id)
         {
             Member m = await _context.Members.FirstAsync(b => b.Id == id);

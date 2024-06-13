@@ -9,7 +9,7 @@ namespace Library.Entities
         public string Description { get; set; }
         public string Author { get; set; }
         public bool IsBorrowed { get; set; }
-        public List<Borrow>borrows { get; set; }
+        public List<Borrow> Borrows { get; set; }
 
     }
 }

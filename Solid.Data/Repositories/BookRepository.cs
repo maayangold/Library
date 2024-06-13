@@ -23,6 +23,7 @@ namespace Solid.Data.Repositories
         {
             return await _context.Books.ToListAsync();
         }
+
         public async Task<Book> GetByIdAsync(int id)
         {
             return await _context.Books.FirstAsync(b => b.Id == id);

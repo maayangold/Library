@@ -24,8 +24,7 @@ namespace Solid.Service
             //return books.Where(u => u.Name.Contains(text));
             return await _bookRepository.GetBooksAsync();
         }
-
-
+  
         public async Task<Book> GetByIdAsync(int id)
         {
             return await _bookRepository.GetByIdAsync(id);
@@ -53,7 +52,7 @@ namespace Solid.Service
         {
             return await _bookRepository.DeleteAsync(id);
         }
-
+        
 
     }
 

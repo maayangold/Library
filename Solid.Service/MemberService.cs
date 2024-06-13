@@ -36,6 +36,10 @@ namespace Solid.Service
 
 
         }
+        public async Task<Borrow> BorrowBooksAsync(int memberId, List<int> bookIds)
+        {
+            return await _memberRepository.BorrowBooksAsync(memberId, bookIds);
+        }
 
         public async Task<Member> PutStatusAsync(int id)
         {
@@ -47,7 +51,6 @@ namespace Solid.Service
         {
             return await _memberRepository.DeleteAsync(id);
         }
-
 
     }
 }
